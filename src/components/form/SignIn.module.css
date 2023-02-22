@@ -1,0 +1,14 @@
+.signin_container {
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 7rem 0;
+}
+
+.signin_logo {
+  width: 200px;
+  height: 200px;
+  background: url("../../assets/signin.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}

@@ -6,7 +6,6 @@ const ForgetPassword = (props) => {
     e.preventDefault();
     // Implement your forget password logic here
   };
-  console.log(props.show);
   return (
     <>
       <Modal

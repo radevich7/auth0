@@ -1,21 +1,43 @@
+import { useState } from "react";
 import styles from "./SignIn.module.css";
-import CustomButton from "../../../components/ui/CustomButton";
-import Form from "react-bootstrap/Form";
 import { Container } from "react-bootstrap";
+import Form from "react-bootstrap/Form";
+
+import CustomButton from "../../../components/ui/CustomButton";
+import CustomFormInput from "../../../components/ui/CustomFormInput";
+
+import { signInInputs } from "../services/inputs";
 
 function SignIn(props) {
+  const [values, setValues] = useState({
+    username: "",
+    password: "",
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
+
+  const onChange = (e) => {
+    setValues({ ...values, [e.target.name]: e.target.value });
+  };
+
+  console.log(values);
   return (
     <Container className={`row align-items-center ${styles.signin_container}`}>
       <div className={`col-sm ${styles.signin_logo}`}></div>
       <Form className="col-sm  ps-5 pe-5">
         <h1 className="text-center mb-4">Member Login</h1>
-        <Form.Group className="mb-3">
-          <Form.Control type="email" placeholder="Enter email" />
-        </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Control type="password" placeholder="Password" />
-        </Form.Group>
+        {signInInputs.map((input) => (
+          <Form.Group className="mb-3" key={input.id}>
+            <CustomFormInput
+              {...input}
+              value={values[input.name]}
+              onChange={onChange}
+            />
+          </Form.Group>
+        ))}
         <CustomButton
           label={"Login"}
           variant={"info"}

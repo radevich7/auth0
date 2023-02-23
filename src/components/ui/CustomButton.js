@@ -1,21 +1,15 @@
 import styles from "./CustomButton.module.css";
 import Button from "react-bootstrap/Button";
 
-export default function CustomButton({
-  className = "",
-  variant = "primary",
-  label = "Button",
-  onClick,
-  size = "lg",
-}) {
+export default function CustomButton(props) {
   return (
     <Button
-      variant={variant}
-      // className={`${styles}.${className}`}
-      size={size}
-      onClick={onClick}
+      variant={props.variant}
+      className={styles[props.className]}
+      size={props.size}
+      onClick={props.onClick}
     >
-      {label}
+      {props.label}
     </Button>
   );
 }

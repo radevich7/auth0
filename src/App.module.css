@@ -25,9 +25,7 @@ img {
   border: 0; /* kills Gecko bug when img's are placed inside links */
   vertical-align: bottom; /* set vertical align to bottom for IE */
 }
-body.modal-open {
-  padding: 0;
-}
+
 /* ------------------- Defaults ------------------- */
 html {
   height: 100%;

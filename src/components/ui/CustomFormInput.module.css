@@ -1,4 +1,14 @@
-.errorMessage {
+span.errorMessage {
+  font-size: 12px;
+  padding: 3px;
   color: red;
-  /* position: absolute; */
+  display: none;
+}
+
+input:invalid[focused="true"] {
+  border: 1px solid red;
+}
+
+input:invalid[focused="true"] ~ span.errorMessage {
+  display: block;
 }

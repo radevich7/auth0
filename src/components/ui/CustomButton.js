@@ -8,6 +8,7 @@ export default function CustomButton(props) {
       className={styles[props.className]}
       size={props.size}
       onClick={props.onClick}
+      type={props.type}
     >
       {props.label}
     </Button>

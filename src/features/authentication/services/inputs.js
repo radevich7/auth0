@@ -20,6 +20,17 @@ export const signInInputs = [
     required: true,
   },
 ];
+export const forgotPasswordInputs = [
+  {
+    id: "1f",
+    name: "email",
+    type: "email",
+    placeholder: "Email",
+    errorMessage: "It should be a valid email address!",
+    label: "Email",
+    required: true,
+  },
+];
 
 export const registrationInputs = [
   {

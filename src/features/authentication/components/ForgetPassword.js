@@ -1,10 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
+import auth0 from "auth0-js";
 import { Modal, Button, Form } from "react-bootstrap";
+import { forgotPasswordInputs } from "../services/inputs";
+import CustomFormInput from "../../../components/ui/CustomFormInput";
+import CustomButton from "../../../components/ui/CustomButton";
 
+import styles from "./ForgetPassword.module.css";
 const ForgetPassword = (props) => {
+  const [email, setEmail] = useState(null);
+  const [passwordResetStatus, setPasswordResetStatus] = useState({
+    status: false,
+    message: "",
+  });
+  const onChange = (e) => {
+    setEmail(e.target.value);
+  };
+  const webAuth = new auth0.WebAuth({
+    domain: process.env.REACT_APP_AUTH0_DOMAIN,
+    clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
+    scope: process.env.REACT_APP_AUTH0_SCOPE,
+  });
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Implement your forget password logic here
+    webAuth.changePassword(
+      {
+        connection: "Username-Password-Authentication",
+        email: email,
+      },
+      function (err, resp) {
+        if (err) {
+          setPasswordResetStatus({ status: false, message: err });
+        } else {
+          setPasswordResetStatus({ status: true, message: resp });
+        }
+      }
+    );
   };
   return (
     <>
@@ -17,23 +47,43 @@ const ForgetPassword = (props) => {
       >
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formBasicEmail">
-              <Form.Label>Email address</Form.Label>
-              <Form.Control type="email" placeholder="Enter email" />
-              <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
-            </Form.Group>
+            {!passwordResetStatus.status &&
+              forgotPasswordInputs.map((input) => (
+                <Form.Group className="mb-3" key={input.id}>
+                  <CustomFormInput {...input} onChange={onChange} />
+                </Form.Group>
+              ))}
+
+            {passwordResetStatus.status && (
+              <span
+                className={
+                  passwordResetStatus.status ? styles.success : styles.error
+                }
+              >
+                {passwordResetStatus.message}
+              </span>
+            )}
+
+            <div className="d-flex justify-content-end">
+              <Button
+                variant="secondary"
+                className="me-1"
+                onClick={props.onHandleShow}
+              >
+                Close
+              </Button>
+              {!passwordResetStatus.status && (
+                <CustomButton
+                  label={"Submit"}
+                  variant={"info"}
+                  className={"submit-btn"}
+                  size={"xl"}
+                  type={"submit"}
+                />
+              )}
+            </div>
           </Form>
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={props.onHandleShow}>
-            Close
-          </Button>
-          <Button variant="primary" type="submit" onClick={handleSubmit}>
-            Submit
-          </Button>
-        </Modal.Footer>
       </Modal>
     </>
   );

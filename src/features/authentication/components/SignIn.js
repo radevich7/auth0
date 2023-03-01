@@ -1,12 +1,13 @@
-import { useState } from "react";
-import auth0 from "auth0-js";
+import { useRef, useState } from "react";
 
 import styles from "./SignIn.module.css";
 import { Container } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import { loginService } from "../services/authService";
 
-import CustomButton from "../../../components/ui/CustomButton";
-import CustomFormInput from "../../../components/ui/CustomFormInput";
+import ButtonCustom from "../../../components/ui/ButtonCustom";
+import FormInputCustom from "../../../components/ui/FormInputCustom";
+import ToastCustom from "../../../components/ui/ToastCustom";
 
 import { signInInputs } from "../services/inputs";
 
@@ -15,12 +16,11 @@ function SignIn(props) {
     email: "",
     password: "",
   });
-  // AUTH0
-  const webAuth = new auth0.WebAuth({
-    domain: process.env.REACT_APP_AUTH0_DOMAIN,
-    clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
-    scope: process.env.REACT_APP_AUTH0_SCOPE,
+  const [loginStatus, setloginStatus] = useState({
+    isError: false,
+    message: "",
   });
+  const signInFormRef = useRef();
 
   const onChange = (e) => {
     setValues({ ...values, [e.target.name]: e.target.value });
@@ -28,46 +28,66 @@ function SignIn(props) {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    loginService(values, setloginStatus);
+  };
 
-    webAuth.login(
-      {
-        username: values.email,
-        password: values.password,
-        realm: process.env.REACT_APP_AUTH0_REALM,
-        redirectUri: process.env.REACT_APP_AUTH0_REDIRECT_URI,
-        responseType: process.env.REACT_APP_AUTH0_LOGIN_RESPONSE_TYPE,
-      },
-      (error) => console.log(error)
-    );
+  const resetFormTostOnClose = () => {
+    setloginStatus({
+      isError: false,
+      message: "",
+    });
+    setValues({
+      email: "",
+      password: "",
+    });
+    signInFormRef.current.reset();
   };
 
   return (
     <Container className={`row align-items-center ${styles.signin_container}`}>
       <div className={`col-sm ${styles.signin_logo}`}></div>
-      <Form onSubmit={handleSubmit} className="col-sm  ps-5 pe-5">
+      <Form
+        ref={signInFormRef}
+        onSubmit={handleSubmit}
+        className="col-sm  ps-5 pe-5"
+      >
         <h1 className="text-center mb-4">Member Login</h1>
 
         {signInInputs.map((input) => (
-          <Form.Group className="mb-3" key={input.id}>
-            <CustomFormInput
+          <Form.Group className="mb-4 position-relative">
+            <FormInputCustom
+              key={input.id}
               {...input}
               value={values[input.name]}
               onChange={onChange}
             />
           </Form.Group>
         ))}
-        <CustomButton
+
+        <ButtonCustom
           label={"Login"}
           variant={"info"}
-          className={"login_btn"}
+          classNameStyles={"login_btn"}
+          className={"mt-2"}
           size={"xl"}
           type={"submit"}
         />
-        <CustomButton
-          className={"forgot_btn"}
+        <ButtonCustom
+          type={"button"}
+          classNameStyles={"forgot_btn"}
           label={"Forgot Username/Password?"}
           variant={"light"}
           onClick={props.onHandleShow}
+        />
+        <ToastCustom
+          position={"top-end"}
+          bg={"danger"}
+          autohide={false}
+          bodyText={loginStatus.message}
+          closeButton={true}
+          classNameBody={"text-white p-4"}
+          show={loginStatus.isError}
+          onClose={resetFormTostOnClose}
         />
       </Form>
     </Container>

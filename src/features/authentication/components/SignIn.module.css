@@ -12,3 +12,10 @@
   background-size: contain;
   background-position: center;
 }
+
+.error {
+  font-size: 12px;
+  padding: 3px;
+  color: red;
+  display: block;
+}

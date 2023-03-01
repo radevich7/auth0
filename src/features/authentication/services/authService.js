@@ -33,3 +33,21 @@ export const changePasswordService = (
     }
   );
 };
+
+export const loginService = (values, setloginStatus) => {
+  webAuth.login(
+    {
+      username: values.email,
+      password: values.password,
+      realm: process.env.REACT_APP_AUTH0_REALM,
+      redirectUri: process.env.REACT_APP_AUTH0_REDIRECT_URI,
+      responseType: process.env.REACT_APP_AUTH0_LOGIN_RESPONSE_TYPE,
+    },
+    function (err) {
+      setloginStatus({
+        isError: true,
+        message: err.description,
+      });
+    }
+  );
+};

@@ -3,6 +3,7 @@ span.errorMessage {
   padding: 3px;
   color: red;
   display: none;
+  position: absolute;
 }
 
 input:invalid[focused="true"] {

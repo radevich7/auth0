@@ -1,18 +1,22 @@
 import { useState } from "react";
 import Form from "react-bootstrap/Form";
-import styles from "./CustomFormInput.module.css";
+import styles from "./FormInputCustom.module.css";
 
-export default function CustomFormInput(props) {
+export default function FormInputCustom(props) {
   // const { errorMessage, onChange, ...props } = props;
   const [focused, setFocused] = useState(false);
   const handleFocus = (e) => {
     setFocused(true);
   };
+  const style = `${
+    props.classNameStyles ? styles[props.classNameStyles] : ""
+  } ${props.className ? props.className : ""}`;
+
   return (
     <>
       <Form.Control
         type={props.type}
-        className={styles[props.className]}
+        className={style}
         placeholder={props.placeholder}
         defaultValue={props.value}
         onChange={props.onChange}

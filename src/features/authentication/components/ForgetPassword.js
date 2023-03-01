@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { forgotPasswordInputs } from "../services/inputs";
 import { changePasswordService } from "../services/authService";
-import CustomFormInput from "../../../components/ui/CustomFormInput";
-import CustomButton from "../../../components/ui/CustomButton";
+import FormInputCustom from "../../../components/ui/FormInputCustom";
+import ButtonCustom from "../../../components/ui/ButtonCustom";
 
 import styles from "./ForgetPassword.module.css";
 const ForgetPassword = (props) => {
@@ -42,7 +42,7 @@ const ForgetPassword = (props) => {
             {!passwordResetStatus.isSuccess &&
               forgotPasswordInputs.map((input) => (
                 <Form.Group className="mb-3" key={input.id}>
-                  <CustomFormInput {...input} onChange={onChange} />
+                  <FormInputCustom {...input} onChange={onChange} />
                 </Form.Group>
               ))}
 
@@ -65,7 +65,7 @@ const ForgetPassword = (props) => {
                 Close
               </Button>
               {!passwordResetStatus.isSuccess && (
-                <CustomButton
+                <ButtonCustom
                   label={"Submit"}
                   variant={"info"}
                   className={"submit-btn"}

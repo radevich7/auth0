@@ -54,9 +54,8 @@ function SignIn(props) {
         <h1 className="text-center mb-4">Member Login</h1>
 
         {signInInputs.map((input) => (
-          <Form.Group className="mb-4 position-relative">
+          <Form.Group className="mb-4 position-relative" key={input.id}>
             <FormInputCustom
-              key={input.id}
               {...input}
               value={values[input.name]}
               onChange={onChange}

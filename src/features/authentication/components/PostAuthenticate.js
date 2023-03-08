@@ -1,13 +1,17 @@
 import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { processHash } from "../services/authService";
 
 export default function PostAuthenticate() {
-  const location = useLocation();
+  const navigate = useNavigate();
   useEffect(() => {
-    if (location.hash) {
-      console.log(yes);
+    console.log(window.location.hash);
+    if (/access_token|id_token|error/.test(window.location.hash)) {
+      processHash(window.location.hash);
+      navigate("/");
     }
-  }, [location]);
+  }, [navigate]);
+
   return (
     <>
       <h1>POST AUTH</h1>

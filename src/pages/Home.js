@@ -1,5 +1,13 @@
 import React from "react";
+import { logoutService } from "../features/authentication/services/authService";
 
 export default function Home() {
-  return <h1>HOME PAGE</h1>;
+  const logoutHandler = () => {
+    logoutService();
+  };
+  return (
+    <>
+      <h1>HOME PAGE</h1>;<button onClick={logoutHandler}>Logout</button>
+    </>
+  );
 }

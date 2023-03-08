@@ -54,6 +54,14 @@ export const loginService = (values, setloginStatus) => {
     }
   );
 };
+export const logoutService = () => {
+  webAuth.logout({
+    clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
+    returnTo: process.env.REACT_APP_AUTH0_REDIRECT_LOGOUT_URI,
+  });
+  localStorage.removeItem("access_token");
+  localStorage.removeItem("id_token");
+};
 
 export const processHash = (hashToken) => {
   webAuth.parseHash({ hash: hashToken }, function (err, authResult) {

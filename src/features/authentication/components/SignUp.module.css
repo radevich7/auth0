@@ -1,0 +1,21 @@
+.signup_container {
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 7rem 0;
+}
+
+.signup_logo {
+  width: 200px;
+  height: 200px;
+  background: url("../../../assets/signup.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+
+.error {
+  font-size: 12px;
+  padding: 3px;
+  color: red;
+  display: block;
+}

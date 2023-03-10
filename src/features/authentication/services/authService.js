@@ -7,6 +7,7 @@ const webAuth = new auth0.WebAuth({
   redirect_uri: process.env.REACT_APP_AUTH0_REDIRECT_URI,
   responseType: process.env.REACT_APP_AUTH0_LOGIN_RESPONSE_TYPE,
 });
+
 export const changePasswordService = (
   enteredEmail,
   setPasswordResetStatus,
@@ -61,6 +62,29 @@ export const logoutService = () => {
   });
   localStorage.removeItem("access_token");
   localStorage.removeItem("id_token");
+};
+
+export const signUpService = (email, password, birthDate, name, phone) => {
+  webAuth.signup(
+    {
+      email,
+      password,
+      user_metadata: {
+        name,
+        birthDate,
+        phone,
+      },
+      connection: process.env.REACT_APP_AUTH0_REALM,
+    },
+    function (err, result) {
+      if (err) {
+        console.log("Error signing up:", err);
+        return;
+      }
+      console.log("User signed up successfully!");
+      console.log(result);
+    }
+  );
 };
 
 export const processHash = (hashToken) => {

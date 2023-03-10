@@ -13,6 +13,7 @@ const ForgetPassword = (props) => {
     isError: false,
     message: "",
   });
+  console.log(email);
   const onChange = (e) => {
     setEmail(e.target.value);
   };
@@ -42,7 +43,11 @@ const ForgetPassword = (props) => {
             {!passwordResetStatus.isSuccess &&
               forgotPasswordInputs.map((input) => (
                 <Form.Group className="mb-3" key={input.id}>
-                  <FormInputCustom {...input} onChange={onChange} />
+                  <FormInputCustom
+                    {...input}
+                    onChange={onChange}
+                    value={email}
+                  />
                 </Form.Group>
               ))}
 

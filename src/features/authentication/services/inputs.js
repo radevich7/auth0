@@ -34,18 +34,7 @@ export const forgotPasswordInputs = [
 
 export const registrationInputs = [
   {
-    id: 1,
-    name: "username",
-    type: "text",
-    placeholder: "Username",
-    errorMessage:
-      "Username should be 3-16 characters and shouldn't include any special character!",
-    label: "Username",
-    pattern: "^[A-Za-z0-9]{3,16}$",
-    required: true,
-  },
-  {
-    id: 2,
+    id: "1r",
     name: "email",
     type: "email",
     placeholder: "Email",
@@ -54,14 +43,14 @@ export const registrationInputs = [
     required: true,
   },
   {
-    id: 3,
+    id: "2r",
     name: "birthday",
     type: "date",
     placeholder: "Birthday",
     label: "Birthday",
   },
   {
-    id: 4,
+    id: "3r",
     name: "password",
     type: "password",
     placeholder: "Password",
@@ -72,7 +61,7 @@ export const registrationInputs = [
     required: true,
   },
   {
-    id: 5,
+    id: "4r",
     name: "confirmPassword",
     type: "password",
     placeholder: "Confirm Password",

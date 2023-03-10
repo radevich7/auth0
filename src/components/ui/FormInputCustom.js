@@ -18,13 +18,17 @@ export default function FormInputCustom(props) {
         type={props.type}
         className={style}
         placeholder={props.placeholder}
-        defaultValue={props.value}
+        defaultValue={props.value[props.name]}
         onChange={props.onChange}
         onBlur={props.handleFocus}
         onFocus={handleFocus}
         name={props.name}
         focused={focused.toString()}
-        pattern={props.pattern}
+        pattern={
+          props.name !== "confirmPassword"
+            ? props.pattern
+            : props.value["password"]
+        }
         required={props.required}
       />
       <span className={styles.errorMessage}>{props.errorMessage}</span>

@@ -8,3 +8,9 @@ button.forgot_btn {
   padding: 0.5rem;
   margin-bottom: 1rem;
 }
+
+button.signup_btn {
+  color: #3587ff;
+  text-align: center;
+  margin: 0 auto;
+}

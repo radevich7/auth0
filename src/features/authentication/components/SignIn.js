@@ -44,22 +44,18 @@ function SignIn(props) {
   };
 
   return (
-    <Container className={`row align-items-center ${styles.signin_container}`}>
+    <Container className={`row align-items-center  ${styles.signin_container}`}>
       <div className={`col-sm ${styles.signin_logo}`}></div>
       <Form
         ref={signInFormRef}
         onSubmit={handleSubmit}
-        className="col-sm  ps-5 pe-5"
+        className="col-sm  ps-5 pe-5 d-flex flex-column"
       >
         <h1 className="text-center mb-4">Member Login</h1>
 
         {signInInputs.map((input) => (
           <Form.Group className="mb-4 position-relative" key={input.id}>
-            <FormInputCustom
-              {...input}
-              value={values[input.name]}
-              onChange={onChange}
-            />
+            <FormInputCustom {...input} value={values} onChange={onChange} />
           </Form.Group>
         ))}
 
@@ -76,7 +72,15 @@ function SignIn(props) {
           classNameStyles={"forgot_btn"}
           label={"Forgot Username/Password?"}
           variant={"light"}
-          onClick={props.onHandleShow}
+          onClick={props.onShowForgotPasswordModal}
+        />
+
+        <ButtonCustom
+          type={"button"}
+          classNameStyles={"signup_btn"}
+          label={"New User/Sign Up"}
+          variant={""}
+          onClick={props.onShowSignUpForm}
         />
         <ToastCustom
           position={"top-end"}

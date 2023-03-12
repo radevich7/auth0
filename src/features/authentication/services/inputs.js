@@ -35,6 +35,26 @@ export const forgotPasswordInputs = [
 export const registrationInputs = [
   {
     id: "1r",
+    name: "firstName",
+    type: "text",
+    placeholder: "First Name",
+    label: "First Name",
+    pattern: `^([a-zA-Z]){1,20}$`,
+    errorMessage: "Please enter a valid first name",
+    required: true,
+  },
+  {
+    id: "2r",
+    name: "lastName",
+    type: "text",
+    placeholder: "Last Name",
+    label: "Last Name",
+    pattern: `^([a-zA-Z]){1,20}([-'][A-Za-z]{1,20})?$`,
+    errorMessage: "Please enter a valid last name",
+    required: true,
+  },
+  {
+    id: "3r",
     name: "email",
     type: "email",
     placeholder: "Email",
@@ -43,14 +63,25 @@ export const registrationInputs = [
     required: true,
   },
   {
-    id: "2r",
+    id: "4r",
+    name: "phone",
+    type: "tel",
+    placeholder: "Phone",
+    errorMessage:
+      "Please enter a valid phone number in the format XXX-XXX-XXXX",
+    pattern: `^([0-9]{3}[0-9]{3}[0-9]{4})$`,
+    label: "Phone",
+    required: true,
+  },
+  {
+    id: "5r",
     name: "birthday",
     type: "date",
     placeholder: "Birthday",
     label: "Birthday",
   },
   {
-    id: "3r",
+    id: "6r",
     name: "password",
     type: "password",
     placeholder: "Password",
@@ -61,7 +92,7 @@ export const registrationInputs = [
     required: true,
   },
   {
-    id: "4r",
+    id: "7r",
     name: "confirmPassword",
     type: "password",
     placeholder: "Confirm Password",

@@ -64,21 +64,25 @@ export const logoutService = () => {
   localStorage.removeItem("id_token");
 };
 
-export const signUpService = (email, password, birthDate, name, phone) => {
+export const signUpService = (values, setSignUpStatus) => {
+  const { firstName, lastName, email, phone, password, birthDate } = values;
   webAuth.signup(
     {
       email,
       password,
       user_metadata: {
-        name,
-        birthDate,
+        name: `${firstName} ${lastName}`,
         phone,
+        birthDate,
       },
       connection: process.env.REACT_APP_AUTH0_REALM,
     },
     function (err, result) {
       if (err) {
-        console.log("Error signing up:", err);
+        setSignUpStatus({
+          isError: true,
+          message: `${err.description}. Please contact administrator.`,
+        });
         return;
       }
       console.log("User signed up successfully!");

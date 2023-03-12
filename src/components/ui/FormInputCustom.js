@@ -8,6 +8,7 @@ export default function FormInputCustom(props) {
   const handleFocus = (e) => {
     setFocused(true);
   };
+
   const style = `${
     props.classNameStyles ? styles[props.classNameStyles] : ""
   } ${props.className ? props.className : ""}`;

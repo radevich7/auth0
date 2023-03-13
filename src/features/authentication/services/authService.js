@@ -1,5 +1,5 @@
 import auth0 from "auth0-js";
-
+import crypto from "crypto-browserify";
 const webAuth = new auth0.WebAuth({
   domain: process.env.REACT_APP_AUTH0_DOMAIN,
   clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
@@ -7,6 +7,30 @@ const webAuth = new auth0.WebAuth({
   redirect_uri: process.env.REACT_APP_AUTH0_REDIRECT_URI,
   responseType: process.env.REACT_APP_AUTH0_LOGIN_RESPONSE_TYPE,
 });
+
+const auth = new auth0.WebAuth({
+  domain: process.env.REACT_APP_AUTH0_DOMAIN,
+  clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
+  redirectUri: process.env.REACT_APP_AUTH0_REDIRECT_URI,
+  responseType: "code",
+  scope: "openid profile email",
+});
+
+
+// const codeVerifier = crypto
+//   .randomBytes(32)
+//   .toString("base64")
+//   .replace(/=/g, "")
+//   .replace(/\+/g, "-")
+//   .replace(/\//g, "_");
+
+// const codeChallenge = crypto
+//   .createHash("sha256")
+//   .update(codeVerifier)
+//   .digest("base64")
+//   .replace(/=/g, "")
+//   .replace(/\+/g, "-")
+//   .replace(/\//g, "_");
 
 export const changePasswordService = (
   enteredEmail,
@@ -39,21 +63,34 @@ export const changePasswordService = (
 };
 
 export const loginService = (values, setloginStatus) => {
-  webAuth.login(
-    {
-      username: values.email,
-      password: values.password,
-      realm: process.env.REACT_APP_AUTH0_REALM,
-      redirect_uri: process.env.REACT_APP_AUTH0_REDIRECT_URI,
-      responseType: process.env.REACT_APP_AUTH0_LOGIN_RESPONSE_TYPE,
-    },
-    function (err) {
-      setloginStatus({
-        isError: true,
-        message: err.description,
-      });
-    }
-  );
+  console.log("codeChallenge");
+  auth.authorize({
+    code_challenge: "codeChallenge",
+    code_challenge_method: "S256",
+  });
+  // auth.parseHash((err, authResult) => {
+  //   if (authResult && authResult.code) {
+  //     console.log(authResult);
+  //   } else if (err) {
+  //     console.error(err);
+  //   }
+  // });
+
+  // webAuth.login(
+  //   {
+  //     username: values.email,
+  //     password: values.password,
+  //     realm: process.env.REACT_APP_AUTH0_REALM,
+  //     redirect_uri: process.env.REACT_APP_AUTH0_REDIRECT_URI,
+  //     responseType: process.env.REACT_APP_AUTH0_LOGIN_RESPONSE_TYPE,
+  //   },
+  //   function (err) {
+  //     setloginStatus({
+  //       isError: true,
+  //       message: err.description,
+  //     });
+  //   }
+  // );
 };
 export const logoutService = () => {
   webAuth.logout({

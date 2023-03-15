@@ -13,7 +13,6 @@ const ForgetPassword = (props) => {
     isError: false,
     message: "",
   });
-  console.log(email);
   const onChange = (e) => {
     setEmail(e.target.value);
   };

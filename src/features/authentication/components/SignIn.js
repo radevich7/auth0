@@ -1,98 +1,34 @@
-import { useRef, useState } from "react";
-
 import styles from "./SignIn.module.css";
 import { Container } from "react-bootstrap";
-import Form from "react-bootstrap/Form";
-import { loginService } from "../services/authService";
+import { getAuthCodeHref } from "../services/authService";
 
-import ButtonCustom from "../../../components/ui/ButtonCustom";
-import FormInputCustom from "../../../components/ui/FormInputCustom";
-import ToastCustom from "../../../components/ui/ToastCustom";
-
-import { signInInputs } from "../services/inputs";
+// import ButtonCustom from "../../../components/ui/ButtonCustom";
 
 function SignIn(props) {
-  const [values, setValues] = useState({
-    email: "",
-    password: "",
-  });
-  const [loginStatus, setloginStatus] = useState({
-    isError: false,
-    message: "",
-  });
-  const signInFormRef = useRef();
-
-  const onChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    loginService(values, setloginStatus);
-  };
-
-  const resetFormTostOnClose = () => {
-    setloginStatus({
-      isError: false,
-      message: "",
-    });
-    setValues({
-      email: "",
-      password: "",
-    });
-    signInFormRef.current.reset();
-  };
-
+  const authHref = getAuthCodeHref();
   return (
     <Container className={`row align-items-center  ${styles.signin_container}`}>
       <div className={`col-sm ${styles.signin_logo}`}></div>
-      <Form
-        ref={signInFormRef}
-        onSubmit={handleSubmit}
-        className="col-sm  ps-5 pe-5 d-flex flex-column"
-      >
+      <div className={`col-sm d-flex flex-column align-items-center`}>
         <h1 className="text-center mb-4">Member Login</h1>
 
-        {signInInputs.map((input) => (
-          <Form.Group className="mb-4 position-relative" key={input.id}>
-            <FormInputCustom {...input} value={values} onChange={onChange} />
-          </Form.Group>
-        ))}
+        <a href={authHref}>SignIn/Register</a>
 
-        <ButtonCustom
-          label={"Login"}
-          variant={"info"}
-          classNameStyles={"login_btn"}
-          className={"mt-2"}
-          size={"xl"}
-          type={"submit"}
-        />
-        <ButtonCustom
+        {/* <ButtonCustom
           type={"button"}
           classNameStyles={"forgot_btn"}
           label={"Forgot Username/Password?"}
           variant={"light"}
           onClick={props.onShowForgotPasswordModal}
         />
-
         <ButtonCustom
           type={"button"}
           classNameStyles={"signup_btn"}
           label={"New User/Sign Up"}
           variant={""}
           onClick={props.onShowSignUpForm}
-        />
-        <ToastCustom
-          position={"top-end"}
-          bg={"danger"}
-          autohide={false}
-          bodyText={loginStatus.message}
-          closeButton={true}
-          classNameBody={"text-white p-4"}
-          show={loginStatus.isError}
-          onClose={resetFormTostOnClose}
-        />
-      </Form>
+        /> */}
+      </div>
     </Container>
   );
 }

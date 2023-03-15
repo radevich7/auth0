@@ -62,7 +62,7 @@ const SignUp = (props) => {
         onSubmit={handleSubmit}
         className="col-sm  ps-5 pe-5 d-flex flex-column"
       >
-        <h1 className="text-center mb-4">Member Login</h1>
+        <h1 className="text-center mb-4">Member Registration</h1>
 
         {registrationInputs.map((input) => (
           <Form.Group className="mb-4 position-relative" key={input.id}>

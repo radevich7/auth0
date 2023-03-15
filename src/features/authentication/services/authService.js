@@ -1,5 +1,5 @@
 import auth0 from "auth0-js";
-import crypto from "crypto-browserify";
+import cryptoBrowserify from "crypto-browserify";
 const webAuth = new auth0.WebAuth({
   domain: process.env.REACT_APP_AUTH0_DOMAIN,
   clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
@@ -7,30 +7,6 @@ const webAuth = new auth0.WebAuth({
   redirect_uri: process.env.REACT_APP_AUTH0_REDIRECT_URI,
   responseType: process.env.REACT_APP_AUTH0_LOGIN_RESPONSE_TYPE,
 });
-
-const auth = new auth0.WebAuth({
-  domain: process.env.REACT_APP_AUTH0_DOMAIN,
-  clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
-  redirectUri: process.env.REACT_APP_AUTH0_REDIRECT_URI,
-  responseType: "code",
-  scope: "openid profile email",
-});
-
-
-// const codeVerifier = crypto
-//   .randomBytes(32)
-//   .toString("base64")
-//   .replace(/=/g, "")
-//   .replace(/\+/g, "-")
-//   .replace(/\//g, "_");
-
-// const codeChallenge = crypto
-//   .createHash("sha256")
-//   .update(codeVerifier)
-//   .digest("base64")
-//   .replace(/=/g, "")
-//   .replace(/\+/g, "-")
-//   .replace(/\//g, "_");
 
 export const changePasswordService = (
   enteredEmail,
@@ -62,36 +38,6 @@ export const changePasswordService = (
   );
 };
 
-export const loginService = (values, setloginStatus) => {
-  console.log("codeChallenge");
-  auth.authorize({
-    code_challenge: "codeChallenge",
-    code_challenge_method: "S256",
-  });
-  // auth.parseHash((err, authResult) => {
-  //   if (authResult && authResult.code) {
-  //     console.log(authResult);
-  //   } else if (err) {
-  //     console.error(err);
-  //   }
-  // });
-
-  // webAuth.login(
-  //   {
-  //     username: values.email,
-  //     password: values.password,
-  //     realm: process.env.REACT_APP_AUTH0_REALM,
-  //     redirect_uri: process.env.REACT_APP_AUTH0_REDIRECT_URI,
-  //     responseType: process.env.REACT_APP_AUTH0_LOGIN_RESPONSE_TYPE,
-  //   },
-  //   function (err) {
-  //     setloginStatus({
-  //       isError: true,
-  //       message: err.description,
-  //     });
-  //   }
-  // );
-};
 export const logoutService = () => {
   webAuth.logout({
     clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
@@ -152,3 +98,84 @@ const setHttpOnlyCookie = (authResult) => {
   localStorage.setItem("access_token", authResult.accessToken);
   localStorage.setItem("id_token", authResult.idToken);
 };
+
+export const loginServiceWithoutPKCE = (values, setloginStatus) => {
+  // auth.parseHash((err, authResult) => {
+  //   if (authResult && authResult.code) {
+  //     console.log(authResult);
+  //   } else if (err) {
+  //     console.error(err);
+  //   }
+  // });
+  // webAuth.login(
+  //   {
+  //     username: values.email,
+  //     password: values.password,
+  //     realm: process.env.REACT_APP_AUTH0_REALM,
+  //     redirect_uri: process.env.REACT_APP_AUTH0_REDIRECT_URI,
+  //     responseType: process.env.REACT_APP_AUTH0_LOGIN_RESPONSE_TYPE,
+  //   },
+  //   function (err) {
+  //     setloginStatus({
+  //       isError: true,
+  //       message: err.description,
+  //     });
+  //   }
+  // );
+};
+const base64URLEncode = (str) => {
+  return str
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=/g, "");
+};
+const sha256 = (buffer) => {
+  return cryptoBrowserify.createHash("sha256").update(buffer).digest();
+};
+
+export const getAuthCodeHref = () => {
+  let verifier = window.localStorage.getItem("verifier");
+  if (verifier === null) {
+    const newVerifier = base64URLEncode(cryptoBrowserify.randomBytes(32));
+
+    window.localStorage.setItem("verifier", newVerifier);
+    verifier = newVerifier;
+  }
+
+  const hrefParameters = {
+    authorizeUrl: "https://dev-v5-wnznu.us.auth0.com/authorize",
+    clientId: process.env.REACT_APP_AUTH0_CLIENT_ID,
+    redirectUri: process.env.REACT_APP_AUTH0_REDIRECT_URI,
+    responseType: "code",
+    codeChallengeMethod: "S256",
+  };
+
+  const challenge = base64URLEncode(sha256(verifier));
+
+  const pkceParams = {
+    code_challenge: challenge,
+    code_challenge_method: hrefParameters.codeChallengeMethod,
+  };
+
+  const authUrl = new URL(hrefParameters.authorizeUrl);
+  authUrl.searchParams.set("client_id", hrefParameters.clientId);
+  authUrl.searchParams.set("redirect_uri", hrefParameters.redirectUri);
+  authUrl.searchParams.set("response_type", hrefParameters.responseType);
+  Object.entries(pkceParams).forEach(([key, value]) => {
+    authUrl.searchParams.set(key, value);
+  });
+  return authUrl;
+};
+
+// {
+//   https://dev-v5-wnznu.us.auth0.com/authorize?
+//     response_type=code&
+//     code_challenge=zR4Gf4xwFovFIDI0yVIjLSAfiXooGrE_xqsFveKjmEo&
+//     code_challenge_method=S256&
+//     client_id=7jBRzwiy2f0tWFG4Jd6JqKdxSlaPcxSQ&
+//     redirect_uri=http://localhost:3000/PostAuthenticate&
+//     scope=openid email profile&
+//     audience=6169bdc7f987b2003f7a5b4d&
+//     state=xyzABC123
+// }

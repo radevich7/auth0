@@ -1,5 +1,8 @@
 import auth0 from "auth0-js";
 import cryptoBrowserify from "crypto-browserify";
+import Cookies from "universal-cookie";
+import axios from "axios";
+
 const webAuth = new auth0.WebAuth({
   domain: process.env.REACT_APP_AUTH0_DOMAIN,
   clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
@@ -7,6 +10,35 @@ const webAuth = new auth0.WebAuth({
   redirect_uri: process.env.REACT_APP_AUTH0_REDIRECT_URI,
   responseType: process.env.REACT_APP_AUTH0_LOGIN_RESPONSE_TYPE,
 });
+
+export const setHttpOnlyCookie = (accessToken) => {
+  const cookies = new Cookies();
+  cookies.set("access_token", accessToken, {
+    path: "/",
+    httpOnly: true,
+    secure: false,
+    sameSite: "strict",
+  });
+
+  console.log("local storage added");
+  localStorage.setItem("access_token", accessToken);
+};
+
+export const getTokenWithAuthCode = async (authCode) => {
+  var options = {
+    method: "POST",
+    url: "https://dev-v5-wnznu.us.auth0.com/oauth/token",
+    headers: { "content-type": "application/x-www-form-urlencoded" },
+    data: new URLSearchParams({
+      grant_type: "authorization_code",
+      client_id: process.env.REACT_APP_AUTH0_CLIENT_ID,
+      code_verifier: localStorage.getItem("verifier"),
+      code: authCode,
+      redirect_uri: process.env.REACT_APP_AUTH0_REDIRECT_URI,
+    }),
+  };
+  return await axios.request(options);
+};
 
 export const changePasswordService = (
   enteredEmail,
@@ -87,18 +119,6 @@ export const processHash = (hashToken) => {
   });
 };
 
-const setHttpOnlyCookie = (authResult) => {
-  // const expiresAt = JSON.stringify(
-  //   authResult.expiresIn * 1000 + new Date().getTime()
-  // );
-  // console.log("cookie added");
-  // document.cookie = `access_token=${authResult.accessToken}; HttpOnly`;
-  // document.cookie = `id_token=${authResult.idToken}; HttpOnly`;
-  console.log("local storage added");
-  localStorage.setItem("access_token", authResult.accessToken);
-  localStorage.setItem("id_token", authResult.idToken);
-};
-
 export const loginServiceWithoutPKCE = (values, setloginStatus) => {
   // auth.parseHash((err, authResult) => {
   //   if (authResult && authResult.code) {
@@ -167,15 +187,3 @@ export const getAuthCodeHref = () => {
   });
   return authUrl;
 };
-
-// {
-//   https://dev-v5-wnznu.us.auth0.com/authorize?
-//     response_type=code&
-//     code_challenge=zR4Gf4xwFovFIDI0yVIjLSAfiXooGrE_xqsFveKjmEo&
-//     code_challenge_method=S256&
-//     client_id=7jBRzwiy2f0tWFG4Jd6JqKdxSlaPcxSQ&
-//     redirect_uri=http://localhost:3000/PostAuthenticate&
-//     scope=openid email profile&
-//     audience=6169bdc7f987b2003f7a5b4d&
-//     state=xyzABC123
-// }

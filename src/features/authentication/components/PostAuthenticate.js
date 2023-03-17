@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import axios from "axios";
 // import { useNavigate } from "react-router-dom";
 import {
   getTokenWithAuthCode,
@@ -17,6 +18,7 @@ export default function PostAuthenticate() {
       }
       getTokenWithAuthCode(code)
         .then((response) => {
+          console.log(response.data);
           setHttpOnlyCookie(response.data["access_token"]);
         })
         .catch((error) => {
@@ -29,6 +31,7 @@ export default function PostAuthenticate() {
         " PostAuthenticate component. getTokenWithAuthCode functionality error"
       );
     }
+    axios("http://localhost:5251/api/employees");
   }, [code]);
 
   return (

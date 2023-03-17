@@ -182,6 +182,9 @@ export const getAuthCodeHref = () => {
   authUrl.searchParams.set("client_id", hrefParameters.clientId);
   authUrl.searchParams.set("redirect_uri", hrefParameters.redirectUri);
   authUrl.searchParams.set("response_type", hrefParameters.responseType);
+  authUrl.searchParams.set("scope", "openid email profile");
+  authUrl.searchParams.set("state", "xyzABC123");
+
   Object.entries(pkceParams).forEach(([key, value]) => {
     authUrl.searchParams.set(key, value);
   });

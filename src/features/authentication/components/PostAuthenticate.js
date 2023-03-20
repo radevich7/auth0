@@ -31,7 +31,6 @@ export default function PostAuthenticate() {
         " PostAuthenticate component. getTokenWithAuthCode functionality error"
       );
     }
-    axios("http://localhost:5251/api/employees");
   }, [code]);
 
   return (
